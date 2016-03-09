@@ -1,76 +1,100 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
 	<title>Leaflet.draw vector editing handlers</title>
-	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+	<meta charset="utf-8">
+	<link rel="icon" type="image/png" href="http://leafletjs.com/docs/images/favicon.ico" />
 
 	<!-- Leaflet kernel -->
-	<link rel="icon" type="image/png" href="http://leafletjs.com/docs/images/favicon.ico" />
-	<link type="text/css" rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-	<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
-	<!-- Draw pluggin -->
-	<link type="text/css" rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/lib/leaflet/leaflet.css" />
-	<script type="text/javascript" src="http://leaflet.github.io/Leaflet.draw/leaflet.draw.js"></script>
-	<script type="text/javascript" src="../../Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script>
-	
-	<--script type="text/javascript" src="../../mapbox/togeojson/togeojson.js"></script>
-	<--script type="text/javascript" src="../../erictheise/rrose/leaflet.rrose-src.js"></script>
+	<!-- Draw plugin -->
+	<link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
+	<script src="../../Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- For Leaflet V0.7 -->
+	<script src="../../Leaflet/Leaflet.draw/src/edit/handler/Edit.Poly.js"></script><!-- For Leaflet V0.7 -->
 
-	<!-- Snap pluggin -->
-	<script type="text/javascript" src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
-	<script type="text/javascript" src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script>
+	<!-- Related plugins -->
+	<script src="../../mapbox/togeojson/togeojson.js"></script>
+	<script src="../../erictheise/rrose/leaflet.rrose-src.js"></script>
 
-	<!-- This pluggin -->
-	<script type="text/javascript" src="Edit.Poly.cut.js"></script>
-	<script type="text/javascript" src="EditToolbar.SwitchPoly.js"></script>
-	<script type="text/javascript" src="Control.Draw.Plus.js"></script>
+	<!-- Snap plugin -->
+	<script src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
+	<script src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes -->
+
+	<!-- This plugin -->
+	<script src="Control.Draw.Plus.js"></script>
+	<script src="../../../src/locales.fr.js"></script>
+
+	<script>
+		window.addEventListener('load', function() {
+			var map = L.map('map').setView([45, 5], 7);
+
+			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'
+			}).addTo(map);
+
+		//------------------------ EDIT -----------------------------------
+
+			var editor = new L.Control.Draw.Plus({
+				draw: {
+					marker: true,
+					polyline: true,
+					polygon: true
+				},
+				edit: {
+					remove: true
+				}
+			}).addTo(map);
+
+			// Initialisation des couches éditables avec le contenu du champ en entrée
+			var ljs = new L.GeoJSON(JSON.parse(document.getElementById('entree').innerHTML));
+			for (var l in ljs._layers)
+				ljs._layers[l].addTo(editor);
+
+			// Restitution des couches éditables dans le champ en sortie
+			map.on('draw:edited', function() {
+				document.getElementById('entree').innerHTML = JSON.stringify(editor.editLayers.toGeoJSON());
+				document.getElementById('change').style.display = '';
+			});
+		});
+	</script>
 </head>
 
 <body>
-	<div id="carte" style="width: 800px; height: 600px"></div>
-	<textarea id="entree" rows="20" cols="120">
-{"type":"FeatureCollection","features":[{"type":"Feature","properties":{},"geometry":{"type":"LineString","coordinates":[[2.581787109375,46.22545288226939],[2.713623046875,45.1510532655634],[4.185791015625,44.972570682240644],[4.866943359375,45.805828539928356]]}},{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[3.1640625,45.336701909968106]}}]}
+	<p>Leaflet extension for markers, polylines, polygons, ... creation & edition.</p>
+	<p>Sources on <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github: Dominique92/Leaflet.draw.plus</a></p>
+	<p>This plugin doesn't support Leaflet V1.0 <a href="index-V1.0.html">yet</a></p>
+	<p>Leaflet <script>document.write(L.version)</script></p>
+
+	<div id="map" style="width: 800px; height: 600px"></div>
+	<p><b>Sortie format gepJson</b></p>
+	<textarea id="entree" rows="10" cols="120">
+{"type":"FeatureCollection","features":[
+	{"type":"Feature","properties":{},"geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},
+	{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[3.5,45.5]}}
+]}
 	</textarea>
 	<div id="change" style="display:none"><i>Changé</i></div>
 
-	<script>
-window.addEventListener('load', function() {
-	var carte = L.map('carte').setView([45, 5], 7);
+	<p><u>Créer une ligne:</u> Cliquer sur le contrôle "Tracer une ligne" puis à l'emplacement du premier sommet...</p>
+	<p><u>Ajouter un sommet:</u> Déplacer un marqueur au milieu d'un côté.</p>
+	<p><u>Déplacer un sommet:</u> Le déplacer.
+	Les sommets déplacés "collent" aux sommets des autres lignes et prennent exactement leur position.</p>
+	<p><u>Supprimer un sommet:</u> Cliquer une fois dessus.</p>
+	<p><u>Etendre une ligne:</u> Cliquer sur le contrôle "Tracer une ligne" puis sur l'extrémité à étendre...</p>
+	<p><u>Fusionner deux lignes:</u> Joindre une extrémité de chacune.</p>
+	<p><u>Supprimer une ligne:</u> Cliquer sur le contrôle "poubelle" puis sur un segment.</p>
+	<p><u>Créer un polygone:</u> Cliquer sur le contrôle "polygone" puis à l'emplacement du premier sommet...</p>
+	<p><u>Ajouter un sommet:</u> Déplacer un marqueur au milieu d'un côté.</p>
+	<p><u>Déplacer un sommet:</u> Le déplacer.
+	Les sommets déplacés "collent" aux sommets des autres massifs et prennent exactement leur position.</p>
+	<p><u>Supprimer un sommet:</u> Cliquer une fois dessus.</p>
+	<p><u>Supprimer un polygone:</u> Cliquer sur le contrôle "poubelle" puis sur un côté.</p>
+	<p>Pour une édition plus complexe, vous pouvez transformer vos polygones en lignes brisées:</p>
+	<p><u>Couper un polygone:</u> Cliquer une fois sur un marqueur au milieu d'un côté. On obtient une ligne.</p>
+	<p><u>Fermer une ligne:</u> Joindre ses deux extrémités. On obtient un polygone.</p>
 
-	L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'
-	}).addTo(carte);
-
-//------------------------ EDIT -----------------------------------
-
-	var editeur = new L.Control.Draw.Plus({
-		draw: {
-			marker: true,
-			polyline: true,
-			polygon: true,
-//			rectangle: true,
-//			circle: true
-		},
-		edit: {
-//			edit: true,
-			switchpoly: true
-		}
-	}).addTo(carte);
-
-	// Initialisation des couches éditables avec le contenu du champ en entrée
-	var ljs = new L.GeoJSON(JSON.parse(document.getElementById('entree').innerHTML));
-	for (var l in ljs._layers)
-		carte.fire('draw:created', {
-			layer: ljs._layers[l]
-		});
-
-	// Restitution des couches éditables dans le champ en sortie
-	carte.on('draw:edited', function() {
-		document.getElementById('entree').innerHTML = JSON.stringify(editeur.editLayers.toGeoJSON());
-		document.getElementById('change').style.display = '';
-	});
-});
-	</script>
+	<div style="position: absolute;right:0;top:0"><a href="../../..">&gt;</a>&nbsp;</div>
 </body>
 </html>
