@@ -22,6 +22,9 @@
 	<script src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
 	<script src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes -->
 
+	<!-- Plugin to help tests -->
+	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/leaflet.filelayer.js"></script>
+
 	<!-- This plugin -->
 	<script src="Control.Draw.Plus.js"></script>
 	<script src="../../../src/locales.fr.js"></script>
@@ -57,6 +60,12 @@
 				document.getElementById('entree').innerHTML = JSON.stringify(editor.editLayers.toGeoJSON());
 				document.getElementById('change').style.display = '';
 			});
+
+			// File loader
+			var fl = new L.Control.FileLayerLoad().addTo(map);
+			fl.loader.on('data:loaded', function(e) {
+				e.layer.addTo(editor);
+			}, fl);
 		});
 	</script>
 </head>
@@ -94,6 +103,7 @@
 	<p>Pour une édition plus complexe, vous pouvez transformer vos polygones en lignes brisées:</p>
 	<p><u>Couper un polygone:</u> Cliquer une fois sur un marqueur au milieu d'un côté. On obtient une ligne.</p>
 	<p><u>Fermer une ligne:</u> Joindre ses deux extrémités. On obtient un polygone.</p>
+	<p><u>Importer un fichier GPX, KML geoJson:</u> Cliquer sur le contrôle "Flèche montante".</p>
 
 	<div style="position: absolute;right:0;top:0"><a href="../../..">&gt;</a>&nbsp;</div>
 </body>
