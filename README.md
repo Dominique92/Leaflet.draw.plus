@@ -13,7 +13,7 @@ and [Leaflet.Snap](https://github.com/makinacorpus/Leaflet.Snap).
 
 DEMO
 ----
-[See a DEMO](http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/)
+[See a DEMO here](http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/)
 
 Usage
 -----

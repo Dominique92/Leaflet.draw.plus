@@ -11,63 +11,23 @@
 
 	<!-- Draw plugin -->
 	<link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
-	<script src="../../Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- For Leaflet V0.7 -->
-	<script src="../../Leaflet/Leaflet.draw/src/edit/handler/Edit.Poly.js"></script><!-- For Leaflet V0.7 -->
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- For Leaflet V0.7 / Version = '0.2.4-dev' / includes Edit.Poly this._cut change-->
 
 	<!-- Related plugins -->
-	<script src="../../mapbox/togeojson/togeojson.js"></script>
-	<script src="../../erictheise/rrose/leaflet.rrose-src.js"></script>
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/mapbox/togeojson/togeojson.js"></script>
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/erictheise/rrose/leaflet.rrose-src.js"></script>
 
 	<!-- Snap plugin -->
 	<script src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
-	<script src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes -->
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes -->
 
 	<!-- Plugin to help tests -->
 	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/leaflet.filelayer.js"></script>
 
 	<!-- This plugin -->
 	<script src="Control.Draw.Plus.js"></script>
-	<script src="../../../src/locales.fr.js"></script>
+	<script src="http://dominique92.github.io/MyLeaflet/src/locales.fr.js"></script>
 
-	<script>
-		window.addEventListener('load', function() {
-			var map = L.map('map').setView([45, 5], 7);
-
-			L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-				attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>; contributors'
-			}).addTo(map);
-
-		//------------------------ EDIT -----------------------------------
-
-			var editor = new L.Control.Draw.Plus({
-				draw: {
-					marker: true,
-					polyline: true,
-					polygon: true
-				},
-				edit: {
-					remove: true
-				}
-			}).addTo(map);
-
-			// Initialisation des couches éditables avec le contenu du champ en entrée
-			var ljs = new L.GeoJSON(JSON.parse(document.getElementById('entree').innerHTML));
-			for (var l in ljs._layers)
-				ljs._layers[l].addTo(editor);
-
-			// Restitution des couches éditables dans le champ en sortie
-			map.on('draw:edited', function() {
-				document.getElementById('entree').innerHTML = JSON.stringify(editor.editLayers.toGeoJSON());
-				document.getElementById('change').style.display = '';
-			});
-
-			// File loader
-			var fl = new L.Control.FileLayerLoad().addTo(map);
-			fl.loader.on('data:loaded', function(e) {
-				e.layer.addTo(editor);
-			}, fl);
-		});
-	</script>
 </head>
 
 <body>
@@ -75,16 +35,20 @@
 	<p>Sources on <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github: Dominique92/Leaflet.draw.plus</a></p>
 	<p>This plugin doesn't support Leaflet V1.0 <a href="index-V1.0.html">yet</a></p>
 	<p>Leaflet <script>document.write(L.version)</script></p>
+	<p>See the code <a href="examples/index.js">here</a></p>
 
 	<div id="map" style="width: 800px; height: 600px"></div>
-	<p><b>Sortie format gepJson</b></p>
-	<textarea id="entree" rows="10" cols="120">
+	<!-- Insert the javascript after the map <div> is defined -->
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/examples/index.js"></script>
+
+	<p><b>geoJson input/output</b></p>
+	<div id="edit-changed" style="display:none"><i>Changé</i></div>
+	<textarea id="edit-json" rows="10" cols="120">
 {"type":"FeatureCollection","features":[
 	{"type":"Feature","properties":{},"geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},
 	{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[3.5,45.5]}}
 ]}
 	</textarea>
-	<div id="change" style="display:none"><i>Changé</i></div>
 
 	<p><u>Créer une ligne:</u> Cliquer sur le contrôle "Tracer une ligne" puis à l'emplacement du premier sommet...</p>
 	<p><u>Ajouter un sommet:</u> Déplacer un marqueur au milieu d'un côté.</p>
@@ -105,6 +69,7 @@
 	<p><u>Fermer une ligne:</u> Joindre ses deux extrémités. On obtient un polygone.</p>
 	<p><u>Importer un fichier GPX, KML geoJson:</u> Cliquer sur le contrôle "Flèche montante".</p>
 
-	<div style="position: absolute;right:0;top:0"><a href="../../..">&gt;</a>&nbsp;</div>
+	<div style="position: absolute;right:0;top:0"><a href="tests">&gt;</a>&nbsp;</div>
+	<div><a href="tests">debug</a></div>
 </body>
 </html>
