@@ -54,7 +54,7 @@ $json_edit = isset ($_POST ['geom'])
 			}).addTo(map);
 
 			new L.Control.Permalink.Cookies({ // shramov/leaflet-plugins
-				layers: new L.Control.Layers.autoHeight(L.TileLayer.collection()).addTo(map)
+				layers: new L.Control.Layers.overflow(L.TileLayer.collection()).addTo(map)
 			}).addTo(map);
 
 			var editeur = new L.Control.Draw.Plus({
