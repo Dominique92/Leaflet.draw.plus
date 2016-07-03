@@ -8,7 +8,7 @@ Leaflet extension for Leaflet.draw
 * Cut & paste polylines
 * Swap style between polylines & polygons
 
-Depends on [Leaflet.draw](https://github.com/Leaflet.draw).
+Depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
 and [Leaflet.Snap](https://github.com/makinacorpus/Leaflet.Snap).
 
 DEMO
