@@ -12,7 +12,8 @@ var editor = new L.Control.Draw.Plus({
 	},
 	edit: {
 		remove: true
-	}
+	},
+	entry: 'edit-json'
 }).addTo(map);
 
 // File loader

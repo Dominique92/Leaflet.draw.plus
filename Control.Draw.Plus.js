@@ -50,10 +50,13 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 		this.editLayers.addTo(this.snapLayers); // Cascade to snapLayers & add the map
 		this.snapLayers.addTo(map); // Make all this visble
 
+		// Add a new feature
 		map.on('draw:created', function(e) {
 			this.addLayer(e.layer);
-		}, this); // Add a new feature
-		map.on('draw:edited draw:deleted', this._optimPoly, this); // Finish modifications & upload
+		}, this);
+
+		// Finish modifications & upload
+		map.on('draw:edited draw:deleted', this._optimPoly, this);
 
 		var ele = document.getElementById(this.options.entry),
 			elc = document.getElementById(this.options.changed);
@@ -61,12 +64,10 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 			var elei = typeof ele.value != 'undefined' ? 'value' : 'innerHTML',
 				ljs = new L.GeoJSON(JSON.parse(ele[elei] || '{"type":"FeatureCollection","features":[]}'), this.options.jsonOptions)._layers;
 
-			// Read geoJson field to be edited
-			for (l in ljs)
-				ljs[l].addTo(this);
-
 			// Write edited geoJson field
-			map.on('draw:edited', function() {
+			map.on('draw:created draw:edited', function() {
+				this._optimPoly();
+
 				if (!this.options.editType)
 					ele[elei] = JSON.stringify(this.editLayers.toGeoJSON()); // Basic FeatureCollection output
 				else {
@@ -96,6 +97,11 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 				if (elc)
 					elc.style.display = '';
 			}, this);
+
+			// Read geoJson field to be edited
+			for (l in ljs)
+				ljs[l].addTo(this);
+			map.fire('draw:edited');
 		}
 
 		return L.Control.Draw.prototype.onAdd.call(this, map);
@@ -153,15 +159,17 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 				// Transform polyline whose the 2 ends match into polygon
 				if (ll1[0].equals(ll1[ll1.length - 1])) {
 					this.editLayers.removeLayer(ls[il1]);
-					this._map.fire('draw:created', {
-						layer: new L.Polygon(ll1)
-					});
+					if (ll1.length > 2) // If at least a triangle. Otherwize delete it.
+						this._map.fire('draw:created', {
+							layer: new L.Polygon(ll1)
+						});
 				}
 				// Merge polylines having ends at the same position
 				for (il2 in ls) {
 					var ll2 = ls[il2]._latlngs,
 						lladd = null; // List of points to move to another polyline
-					if (ll2 && !ls[il2].options.fill && // The other is also a polyline
+					if (ls[il1] && // The first hasn't been deleted !
+						ll2 && !ls[il2].options.fill && // The 2nd is also a polyline
 						ls[il1]._leaflet_id < ls[il2]._leaflet_id) { // Only once each pair
 						if (ll1[0].equals(ll2[0])) {
 							ll1.reverse();
@@ -194,8 +202,9 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 // This needs modification of Leaflet.draw/src/edit/handler/Edit.Poly line 233 : .on('click', this._cut, this)
 L.Edit.Poly.include({
 	_cut: function(e) {
-		if (e.target._index)
-			return; // Did not click a middle marker !
+		if (e.target._index || // Did not click a middle marker !
+			this._markers.length < 3) // Last segment
+			return;
 
 		var marker1, marker2;
 		for (m in this._markers)
