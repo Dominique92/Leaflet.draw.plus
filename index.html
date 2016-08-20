@@ -6,12 +6,14 @@
 	<link rel="icon" type="image/png" href="http://leafletjs.com/docs/images/favicon.ico" />
 
 	<!-- Leaflet kernel -->
+	<!-- We do need to run v0.7.7 here because other plugins (snap) don't work on Leaflet v1.0 yet (2016 aug status) -->
 	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
 	<!-- Draw plugin -->
+	<!-- We do need to run draw v0.2.4-dev commit c3c9f7e5e9e04c4d734cb30dd47ec54cfc3d4b8b here because the snap plugin does not work with the last draw commit (2016 aug status) -->
 	<link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- For Leaflet V0.7 / Version = '0.2.4-dev' / includes Edit.Poly this._cut change-->
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- includes Edit.Poly this._cut changes by Dominique92 -->
 
 	<!-- Related plugins -->
 	<script src="http://dominique92.github.io/MyLeaflet/github.com/mapbox/togeojson/togeojson.js"></script>
@@ -19,15 +21,16 @@
 
 	<!-- Snap plugin -->
 	<script src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes -->
+	<script src="http://dominique92.github.io/MyLeaflet/github.com/makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes by Dominique92 -->
 
 	<!-- Plugin to help tests -->
-	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/leaflet.filelayer.js"></script>
+	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/node_modules/leaflet.filelayer.js"></script>
 
 	<!-- This plugin -->
 	<script src="Control.Draw.Plus.js"></script>
-	<script src="http://dominique92.github.io/MyLeaflet/src/locales.fr.js"></script>
 
+	<!-- Misc Dominique92 adjustments -->
+	<script src="http://dominique92.github.io/MyLeaflet/src/locales.fr.js"></script>
 </head>
 
 <body>
