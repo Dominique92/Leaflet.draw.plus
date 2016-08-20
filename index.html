@@ -1,36 +1,95 @@
+<?php //><div style="display:none">
+	// http://xxx.github.io doesn't offer PHP nor SQL services
+	// For interface with a MySQL 5.x database, rename this file as .php & run on a server offering PHP & MySQL
+	// You can also interface PgSQL while renaming some of the below functions & commands
+
+	/* Create a database on your server with a geom
+	CREATE DATABASE drawdb;
+	USE drawdb;
+	CREATE TABLE IF NOT EXISTS drawtable (
+	  geom geometrycollection NOT NULL,
+	  id int NOT NULL AUTO_INCREMENT,
+	  PRIMARY KEY (id)
+	);
+	INSERT INTO drawtable (geom, id) VALUES (GeomFromText('POINT(5 45)',0), 1);
+	*/
+
+	// Replace SQL parameters by yours
+	$mysqli_server_name = 'localhost';
+	$mysqli_user = 'root';
+	$mysqli_psswd = '';
+	$mysqli_db = 'drawdb';
+	$mysqli_table = 'drawtable';
+	$mysqli_field = 'geom';
+
+	// Connect to the database
+	$mysqli = @new mysqli ($mysqli_server_name, $mysqli_user, $mysqli_psswd, $mysqli_db);
+	if ($mysqli->connect_errno) {
+		echo $mysqli->connect_error;
+		exit;
+	}
+
+	// Get geoPHP library
+	if (is_dir ('../../phayes/geoPHP'))
+		include_once ('../../phayes/geoPHP/geoPHP.inc');
+	elseif (is_dir ('geoPHP-master'))
+		include_once ('geoPHP-master/geoPHP.inc');
+	else {
+		var_dump ('Get full package from https://github.com/phayes/geoPHP & unzip geoPHP-master/... at this file level'); 
+		exit;
+	}
+
+	// Upload edition changes to the database
+	echo ('$_POST = '); var_dump ($_POST);
+	if (isset ($_POST['geom'])) {
+		echo ('$wkt_post = '); var_dump ($wkt_post = geoPHP::load($_POST['geom'], 'json')->out('wkt'));
+		echo ('$sql = '); var_dump ($sql = "UPDATE $mysqli_table SET $mysqli_field = GeomFromText('$wkt_post') where id = 1");
+		$mysqli->query($sql);
+	}
+
+	// Get existing data from the database
+	$result = $mysqli->query("SELECT ST_AsText($mysqli_field) AS geom FROM $mysqli_table where id = 1");
+	echo ('$ST_AsText = '); var_dump ($ST_AsText = $result->fetch_object());
+	echo ('$json_sql = '); var_dump ($json_sql = geoPHP::load($ST_AsText->geom,'wkt')->out('json'));
+?></div>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 	<title>Leaflet.draw vector editing handlers</title>
 	<meta charset="utf-8">
-	<link rel="icon" type="image/png" href="http://leafletjs.com/docs/images/favicon.ico" />
+	<link href="http://leafletjs.com/docs/images/favicon.ico" rel="icon" type="image/png" />
+
+	<?php if (!is_dir ('../../Dominique92')) { // Run .html or standalone .php ?>
+	<base href="http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/" />
+	<?php } ?>
 
 	<!-- Leaflet kernel -->
 	<!-- We do need to run v0.7.7 here because other plugins (snap) don't work on Leaflet v1.0 yet (2016 aug status) -->
-	<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+	<link href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" rel="stylesheet" />
 	<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
 
 	<!-- Draw plugin -->
 	<!-- We do need to run draw v0.2.4-dev commit c3c9f7e5e9e04c4d734cb30dd47ec54cfc3d4b8b here because the snap plugin does not work with the last draw commit (2016 aug status) -->
-	<link rel="stylesheet" href="http://leaflet.github.io/Leaflet.draw/leaflet.draw.css" />
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- includes Edit.Poly this._cut changes by Dominique92 -->
+	<link href="../../Leaflet/Leaflet.draw/dist/leaflet.draw.css" rel="stylesheet" />
+	<script src="../../Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script><!-- includes Edit.Poly this._cut changes by Dominique92 -->
 
 	<!-- Related plugins -->
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/mapbox/togeojson/togeojson.js"></script>
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/erictheise/rrose/leaflet.rrose-src.js"></script>
+	<script src="../../mapbox/togeojson/togeojson.js"></script>
+	<script src="../../erictheise/rrose/leaflet.rrose-src.js"></script>
 
 	<!-- Snap plugin -->
 	<script src="http://makinacorpus.github.io/Leaflet.Snap/Leaflet.GeometryUtil/dist/leaflet.geometryutil.js"></script>
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes by Dominique92 -->
+	<script src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script><!-- Includes auto-snap changes by Dominique92 -->
 
-	<!-- Plugin to help tests -->
-	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/node_modules/leaflet.filelayer.js"></script>
+	<!-- Plugin to import GPX files -->
+	<script src="http://makinacorpus.github.io/Leaflet.FileLayer/node_modules/leaflet-filelayer/leaflet.filelayer.js"></script>
 
 	<!-- This plugin -->
 	<script src="Control.Draw.Plus.js"></script>
 
 	<!-- Misc Dominique92 adjustments -->
-	<script src="http://dominique92.github.io/MyLeaflet/src/locales.fr.js"></script>
+	<script src="../../../src/locales.fr.js"></script>
 </head>
 
 <body>
@@ -38,20 +97,24 @@
 	<p>Sources & docs on <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github: Dominique92/Leaflet.draw.plus</a></p>
 	<p>This plugin doesn't support Leaflet V1.0</p>
 	<p>Leaflet <script>document.write(L.version)</script></p>
-	<p>See the code <a href="examples/index.js">here</a></p>
+	<p>See the code <a href="index.js">here</a></p>
 
 	<div id="map" style="width: 800px; height: 600px"></div>
-	<!-- Insert the javascript after the map <div> is defined -->
-	<script src="http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/examples/index.js"></script>
 
-	<p><b>geoJson input/output</b></p>
-	<div id="edit-changed" style="display:none"><i>Changé</i></div>
-	<textarea id="edit-json" rows="10" cols="120">
-{"type":"FeatureCollection","features":[
-	{"type":"Feature","properties":{},"geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},
-	{"type":"Feature","properties":{},"geometry":{"type":"Point","coordinates":[3.5,45.5]}}
-]}
-	</textarea>
+	<form id="postform" method="post" action="#" enctype="multipart/form-data">
+		<input type="submit" name="post" value="Save" />
+		<p><b>geoJson input/output</b></p>
+		<div id="edit-changed" style="display:none"><i>Changé</i></div>
+		<textarea id="edit-json" name ="geom" rows="10" cols="120">
+			<?=$json_sql?>
+		</textarea>
+	</form>
+
+	<!-- Insert the javascript after all the <div> are defined -->
+	<?php if (0) { // Init input when the file is .html ?>
+	<script>document.getElementById('edit-json').value='{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},{"type":"Feature","geometry":{"type":"Point","coordinates":[3.5,45.5]}}]}'</script>
+	<?php } ?>
+	<script src="index.js"></script>
 
 	<p><u>Créer une ligne:</u> Cliquer sur le contrôle "Tracer une ligne" puis à l'emplacement du premier sommet...</p>
 	<p><u>Ajouter un sommet:</u> Déplacer un marqueur au milieu d'un côté.</p>
@@ -77,11 +140,6 @@
 	   style="position:absolute;top:0;right:0"
 	   title="Sources & docs">
 		<img src="../../../src/images/fork_me.png" />
-	</a>
-	<a href="tests"
-	   style="position:absolute;top:150px;right:0;text-decoration:none;font-size:large"
-	   title="Debug mode">
-		&#x2713;
 	</a>
 </body>
 </html>
