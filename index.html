@@ -1,58 +1,3 @@
-<?php //><div style="display:none">
-	// http://xxx.github.io doesn't offer PHP nor SQL services
-	// For interface with a MySQL 5.x database, rename this file as .php & run on a server offering PHP & MySQL
-	// You can also interface PgSQL while renaming some of the below functions & commands
-
-	/* Create a database on your server with a geom
-	CREATE DATABASE drawdb;
-	USE drawdb;
-	CREATE TABLE IF NOT EXISTS drawtable (
-	  geom geometrycollection NOT NULL,
-	  id int NOT NULL AUTO_INCREMENT,
-	  PRIMARY KEY (id)
-	);
-	INSERT INTO drawtable (geom, id) VALUES (GeomFromText('POINT(5 45)',0), 1);
-	*/
-
-	// Replace SQL parameters by yours
-	$mysqli_server_name = 'localhost';
-	$mysqli_user = 'root';
-	$mysqli_psswd = '';
-	$mysqli_db = 'drawdb';
-	$mysqli_table = 'drawtable';
-	$mysqli_field = 'geom';
-
-	// Connect to the database
-	$mysqli = @new mysqli ($mysqli_server_name, $mysqli_user, $mysqli_psswd, $mysqli_db);
-	if ($mysqli->connect_errno) {
-		echo $mysqli->connect_error;
-		exit;
-	}
-
-	// Get geoPHP library
-	if (is_dir ('../../phayes/geoPHP'))
-		include_once ('../../phayes/geoPHP/geoPHP.inc');
-	elseif (is_dir ('geoPHP-master'))
-		include_once ('geoPHP-master/geoPHP.inc');
-	else {
-		var_dump ('Get full package from https://github.com/phayes/geoPHP & unzip geoPHP-master/... at this file level'); 
-		exit;
-	}
-
-	// Upload edition changes to the database
-	echo ('$_POST = '); var_dump ($_POST);
-	if (isset ($_POST['geom'])) {
-		echo ('$wkt_post = '); var_dump ($wkt_post = geoPHP::load($_POST['geom'], 'json')->out('wkt'));
-		echo ('$sql = '); var_dump ($sql = "UPDATE $mysqli_table SET $mysqli_field = GeomFromText('$wkt_post') where id = 1");
-		$mysqli->query($sql);
-	}
-
-	// Get existing data from the database
-	$result = $mysqli->query("SELECT ST_AsText($mysqli_field) AS geom FROM $mysqli_table where id = 1");
-	echo ('$ST_AsText = '); var_dump ($ST_AsText = $result->fetch_object());
-	echo ('$json_sql = '); var_dump ($json_sql = geoPHP::load($ST_AsText->geom,'wkt')->out('json'));
-?></div>
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -94,27 +39,22 @@
 
 <body>
 	<p>Leaflet extension for markers, polylines, polygons, ... creation & edition.</p>
-	<p>Sources & docs on <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github: Dominique92/Leaflet.draw.plus</a></p>
-	<p>This plugin doesn't support Leaflet V1.0</p>
-	<p>Leaflet <script>document.write(L.version)</script></p>
+	<p>Run on Leaflet <script>document.write(L.version)</script> (This plugin is not supported on Leaflet V1.0)</p>
 	<p>See the code <a href="index.js">here</a></p>
+	<?php if (0) { // Init input when the file is .html ?>
+		<p>This example run on a server without PHP & SQL services. If you want it to save your data on a database, you need to get the full package from <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github.com/Dominique92/Leaflet.draw.plus</a>, unzip & copy it in your own server and run Leaflet.draw.plus/test.</p>
+	<?php } ?>
 
 	<div id="map" style="width: 800px; height: 600px"></div>
 
-	<form id="postform" method="post" action="#" enctype="multipart/form-data">
-		<input type="submit" name="post" value="Save" />
+	<form id="postform" method="post" action="http://<?=$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']?>#" enctype="multipart/form-data">
 		<p><b>geoJson input/output</b></p>
+		<input type="submit" name="post" id="save" value="Save" />
 		<div id="edit-changed" style="display:none"><i>Changé</i></div>
 		<textarea id="edit-json" name ="geom" rows="10" cols="120">
 			<?=$json_sql?>
 		</textarea>
 	</form>
-
-	<!-- Insert the javascript after all the <div> are defined -->
-	<?php if (0) { // Init input when the file is .html ?>
-	<script>document.getElementById('edit-json').value='{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},{"type":"Feature","geometry":{"type":"Point","coordinates":[3.5,45.5]}}]}'</script>
-	<?php } ?>
-	<script src="index.js"></script>
 
 	<p><u>Créer une ligne:</u> Cliquer sur le contrôle "Tracer une ligne" puis à l'emplacement du premier sommet...</p>
 	<p><u>Ajouter un sommet:</u> Déplacer un marqueur au milieu d'un côté.</p>
@@ -141,5 +81,17 @@
 	   title="Sources & docs">
 		<img src="../../../src/images/fork_me.png" />
 	</a>
+
+	<?php if (0) { // Init input when the file is .html ?>
+		<style>
+			#save {display:none}
+		</style>
+		<script>
+			document.getElementById('edit-json').value =		'{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},{"type":"Feature","geometry":{"type":"Point","coordinates":[3.5,45.5]}}]}';
+		</script>
+	<?php } ?>
+
+	<!-- Insert the javascript after all the <div> are defined -->
+	<script src="index.js"></script>
 </body>
 </html>
