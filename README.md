@@ -34,6 +34,13 @@ Default is none.
 			edit: true, // Capability to edit a feature
 			remove: true // Capability to remove a feature
 		},
+		editType: 'Marker', // Force geoGson type : 
+			// Marker : Only the last point will be saved {"type":"Point","coordinates":[0,0]}
+			// Polyline : Only the last poly will be saved / converted in {"type":"LineString","coordinates":[[0,0],[0,0]]}
+			// Polygon : Only the last poly will be saved / converted in {"type":"Polygon","coordinates":[[0,0],[0,0]]}
+			// MultiPolyline : All poly will be saved / converted  in {"type":"MultiLineString","coordinates":[[[[0,0],[0,0]]],[[[0,0],[0,0]]]]}
+			// MultiPolygon : All poly will be saved / converted  in {"type":"MultiPolygon","coordinates":[[[[0,0],[0,0]]],[[[0,0],[0,0]]]]}
+			// Default (not specified or '') : GeometryCollection
 		entry: 'edit-json', // <textarea id="edit-json">JSON</textarea> | <input type="hidden" id="edit-json" name="xxx" value="JSON"> : geoJson field to be edited
 		jsonOptions: {}, // Options to be used when retreiving Json from <input />
 		changed: 'edit-changed' // <span id="edit-changed" style="display:none">changed</span> : warn changes to be saved
