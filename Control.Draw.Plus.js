@@ -114,6 +114,9 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 	},
 
 	_optimSavGeom: function() {
+		if (this._map.noOptim)
+			return;
+
 		// Optimize the edited layers
 		var ls = this.editLayers._layers;
 		for (il1 in ls) { // For all layers being edited
@@ -241,14 +244,16 @@ L.Edit.PolyVerticesEdit.include({
 					remove: true // Just remove it
 				});
 			else {
+				this._map.noOptim = true;
 				var ll = [];
 				while (m = this._markers[marker2._index]) { // Remove all the summits between the cut & the end line
 					ll.push(m._latlng);
 					this._onMarkerClick({
-						target: m,
-						remove: true
+						target: m
 					});
 				}
+				this._map.noOptim = false;
+
 				// And reuse these summits to create a new polyline
 				this._poly._map.fire('draw:created', { // Create a new Polyline
 					layer: new L.Polyline(ll, this._poly.options)
