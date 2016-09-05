@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<title>Leaflet.draw geometries editor</title>
+	<meta charset="utf-8">
+	<link href="http://leafletjs.com/docs/images/favicon.ico" rel="icon" type="image/png" />
+
+	<?php if (!is_dir ('../../../Dominique92')) { // Run .html or standalone .php ?>
+		<base href="http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/" />
+	<?php } ?>
+
+	<!-- Leaflet kernel -->
+	<link  href="../../../../src/lib/v1/Leaflet-1.0.0-rc.3/dist/leaflet.css" rel="stylesheet" />
+	<script src="../../../../src/lib/v1/Leaflet-1.0.0-rc.3/dist/leaflet.js"></script>
+
+	<!-- Draw plugin -->
+	<link  href="../../../../src/lib/v1/Leaflet.draw/leaflet.draw.css" rel="stylesheet" />
+	<script src="../../../../src/lib/v1/Leaflet.draw/leaflet.draw-src.js"></script>
+
+	<!-- Related plugins -->
+	<script src="../../../mapbox/togeojson/togeojson.js"></script>
+	<script src="../../../erictheise/rrose/leaflet.rrose-src.js"></script>
+
+	<!-- Snap plugin (Not announced compatible V1 !) -->
+	<script src="../../../makinacorpus/Leaflet.GeometryUtil/src/leaflet.geometryutil.js"></script>
+	<script>
+		L.Edit.PolyVerticesEdit = L.Edit.Poly.extend({}); // Try to ack : V0.7 renamed
+	</script>
+	<script src="../../../../src/lib/v1/Leaflet.Snap/leaflet.snap.js"></script><!-- This commit is compatible Leaflet.draw < 0.2.3 ->>
+
+	<!-- Plugin to import GPX files -->
+	<script src="../../../makinacorpus/Leaflet.FileLayer/src/leaflet.filelayer.js"></script>
+
+	<!-- This plugin -->
+	<script src="../Control.Draw.Plus.js"></script>
+
+	<!-- Misc Dominique92 adjustments -->
+	<script src="../../../../src/locales.fr.js"></script>
+</head>
+
+<body>
+	<p>Test file for Leaflet.Draw, Snap & draw+ on Leaflet V1.0 <span style="color:red">(NOT YET SUPPORTED !)</span></p>
+	<p>Run on Leaflet <script>document.write(L.version)</script></p>
+	<?php if (0) { // Init input when the file is .html ?>
+		<p>This example run on a server without PHP & SQL services. If you want it to save your data on a database, you need to get the full package from <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github.com/Dominique92/Leaflet.draw.plus</a>, unzip & copy it in your own server and run Leaflet.draw.plus/test.</p>
+	<?php } ?>
+
+	<div id="map" style="width: 800px; height: 600px"></div>
+
+	<form id="postform" method="post" action="http://<?=$_SERVER['SERVER_NAME'].$_SERVER['PHP_SELF']?>#" enctype="multipart/form-data">
+		<p><b>geoJson input/output</b></p>
+		<input type="submit" name="post" id="save" value="Save" />
+		<div id="edit-changed" style="display:none"><i>Changé</i></div>
+		<textarea id="edit-json" name ="geom" rows="10" cols="120">
+			<?=$json_sql?>
+		</textarea>
+	</form>
+	<?php if (0) { // Init input when the file is .html ?>
+		<style>
+			#save {display:none}
+		</style>
+		<script>
+			document.getElementById('edit-json').value =		'{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":[[2.5,46],[3,45],[4,45],[5,45.8]]}},{"type":"Feature","geometry":{"type":"Point","coordinates":[3.5,45.5]}}]}';
+		</script>
+	<?php } ?>
+
+	<!-- Insert the javascript after all <div> are defined -->
+	<script src="../index.js"></script>
+</body>
+</html>
