@@ -45,14 +45,14 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 	},
 
 	onAdd: function(map) {
-		this.editToolbar = this._toolbars[Object.keys(this._toolbars)[1]]; // Find edit tool bar
-		this.editToolbar.options.featureGroup = this.editLayers; // Link the layers to edit
+		this._toolbars['edit'].options.featureGroup = this.editLayers; // Link the layers to edit
 		this.editLayers.addTo(this.snapLayers); // Cascade to snapLayers & add the map
 		this.snapLayers.addTo(map); // Make all this visble
 
 		// Add all new features to the map
 		map.on('draw:created', function(e) {
 			this.addLayer(e.layer);
+			e.layer.on('deleted', this._optimSavGeom, this);
 		}, this);
 
 		// Read geoJson field to be edited
@@ -70,7 +70,7 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 		}
 
 		// Finish modifications & upload
-		map.on('draw:created draw:editvertex draw:deleted', this._optimSavGeom, this);
+		map.on('draw:created draw:editvertex', this._optimSavGeom, this);
 		this._optimSavGeom(); // Clean & rewrite json field at the init
 
 		return L.Control.Draw.prototype.onAdd.call(this, map);
@@ -108,8 +108,9 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 
 		// Close enables edit toolbar handlers & save changes
 		layer.on('deleted', function() {
-			for (m in this.editToolbar._modes)
-				this.editToolbar._modes[m].handler.disable();
+			for (m in this._toolbars['edit']._modes)
+				this._toolbars['edit']._modes[m].handler.disable();
+			this._optimSavGeom();
 		}, this);
 	},
 
