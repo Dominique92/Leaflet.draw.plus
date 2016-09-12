@@ -205,7 +205,7 @@ L.Control.Draw.Plus = L.Control.Draw.extend({
 // Horible hack : modify onClick action on MiddleMarkers Leaflet.draw/Edit.Poly.js & generated files
 eval ('L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = ' +
 	L.Edit.PolyVerticesEdit.prototype._createMiddleMarker.toString()
-		.replace (/'click', onClick, this|"click",i,this/g, "'click',this._cut,this")
+		.replace (/'click', onClick, this|'click',[a-z],this/g, "'click',this._cut,this")
 );
 
 L.Edit.PolyVerticesEdit.include({
