@@ -10,31 +10,23 @@
 	<?php } ?>
 
 	<!-- Leaflet kernel -->
-	<!-- We do need to run v0.7.7 here because other plugins (snap) don't work on Leaflet v1.0 yet (2016 aug status) -->
-	<link href="../../Leaflet/Leaflet/dist/leaflet.css" rel="stylesheet" />
-	<script src="../../Leaflet/Leaflet/dist/leaflet-src.js"></script>
+	<link  href="//cdn.leafletjs.com/leaflet-0.7/leaflet.css" rel="stylesheet"/>
+	<script src="//cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 
 	<!-- Draw plugin -->
-	<link href="../../Leaflet/Leaflet.draw/dist/leaflet.draw.css" rel="stylesheet" />
-	<script src="../../Leaflet/Leaflet.draw/dist/leaflet.draw-src.js"></script>
-
-	<!-- Related plugins -->
-	<script src="../../mapbox/togeojson/togeojson.js"></script>
-	<script src="../../erictheise/rrose/leaflet.rrose-src.js"></script>
+	<link  href="http://leaflet.github.io/Leaflet.draw/dist/leaflet.draw.css" rel="stylesheet" />
+	<script src="http://leaflet.github.io/Leaflet.draw/dist/leaflet.draw-src.js"></script>
 
 	<!-- Snap plugin -->
-	<script src="../../makinacorpus/Leaflet.GeometryUtil/src/leaflet.geometryutil.js"></script>
-	<script src="../../makinacorpus/Leaflet.Snap/leaflet.snap.js"></script>
+	<script src="http://makinacorpus.github.io/Leaflet.Snap/node_modules/leaflet-geometryutil/dist/leaflet.geometryutil.js"></script>
+	<script src="http://makinacorpus.github.io/Leaflet.Snap/leaflet.snap.js"></script>
 
-	<!-- Plugin to import GPX files -->
+	<!-- Plugins to import GPX files -->
 	<script src="../../mapbox/togeojson/togeojson.js"></script>
 	<script src="../../makinacorpus/Leaflet.FileLayer/src/leaflet.filelayer.js"></script>
 
 	<!-- This plugin -->
 	<script src="Control.Draw.Plus.js"></script>
-
-	<!-- Misc Dominique92 adjustments -->
-	<script src="../../../src/locales.fr.js"></script>
 
 	<!-- Disable save if no PHP -->
 	<style>
@@ -49,7 +41,7 @@
 
 <body>
 	<p>Leaflet extension for markers, polylines, polygons, ... creation & edition.</p>
-	<p>This demo runs on Leaflet <script>document.write(L.version)</script> <span style="color:red">(This plugin is not supported on Leaflet V1.0)</span></p>
+	<p>This demo runs on Leaflet V<script>document.write(L.version)</script> &#10144; <a href="v1">See demo on Leaflet V1.0</a></p>
 
 	<div id="map" style="width: 800px; height: 600px"></div>
 
@@ -100,7 +92,7 @@
 	<a href="https://github.com/Dominique92/Leaflet.draw.plus"
 	   style="position:absolute;top:0;right:0"
 	   title="Sources & docs">
-		<img src="../../../src/images/fork_me.png" />
+		<img src="http://www.zimuel.it/img/forkme.png" />
 	</a>
 	<p>Visit my fully integrated <a href= "https://github.com/Dominique92/MyLeaflet">Dominique92/MyLeaflet</a> library</p>
 
