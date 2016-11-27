@@ -5,28 +5,28 @@
 	<meta charset="utf-8">
 	<link href="http://leafletjs.com/docs/images/favicon.ico" rel="icon" type="image/png" />
 
-	<?php if (!is_dir ('../../../Dominique92')) { // Run .html or standalone .php ?>
-		<base href="http://dominique92.github.io/MyLeaflet/github.com/Dominique92/Leaflet.draw.plus/" />
+	<?php if (!is_dir ('../../../lib')) { // Run .html or standalone .php ?>
+		<base href="https://dominique92.github.io/MyLeaflet/lib/Leaflet.draw.plus-master/v0.7/" />
 	<?php } ?>
 
 	<!-- Leaflet kernel -->
-	<link  href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" rel="stylesheet" />
-	<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+	<link  href="//cdn.leafletjs.com/leaflet-0.7/leaflet.css" rel="stylesheet"/>
+	<script src="//cdn.leafletjs.com/leaflet-0.7/leaflet.js"></script>
 
 	<!-- Draw plugin -->
-	<link  href="http://leaflet.github.io/Leaflet.draw/dist/leaflet.draw.css" rel="stylesheet" />
-	<script src="http://leaflet.github.io/Leaflet.draw/dist/leaflet.draw-src.js"></script>
+	<link  href="../../Leaflet.draw-master/dist/leaflet.draw-src.css" rel="stylesheet" />
+	<script src="../../Leaflet.draw-master/dist/leaflet.draw-src.js"></script>
 
 	<!-- Snap plugin -->
-	<script src="http://makinacorpus.github.io/Leaflet.Snap/node_modules/leaflet-geometryutil/dist/leaflet.geometryutil.js"></script>
-	<script src="http://makinacorpus.github.io/Leaflet.Snap/leaflet.snap.js"></script>
+	<script src="../../Leaflet.Snap-master/docs/node_modules/leaflet-geometryutil/dist/leaflet.geometryutil.js"></script>
+	<script src="../../Leaflet.Snap-master/leaflet.snap.js"></script>
 
 	<!-- Plugins to import GPX files -->
-	<script src="../../../mapbox/togeojson/togeojson.js"></script>
-	<script src="../../../makinacorpus/Leaflet.FileLayer/src/leaflet.filelayer.js"></script>
+	<script src="../../togeojson-master/togeojson.js"></script>
+	<script src="../../Leaflet.FileLayer-master/src/leaflet.filelayer.js"></script>
 
 	<!-- This plugin -->
-	<script src="../Control.Draw.Plus.js"></script>
+	<script src="../src/Control.Draw.Plus.js"></script>
 
 	<!-- Disable save if no PHP -->
 	<style>
@@ -41,7 +41,7 @@
 
 <body>
 	<p>Leaflet extension for markers, polylines, polygons, ... creation & edition.</p>
-	<p>This demo runs on Leaflet V<script>document.write(L.version)</script> &#10144; <a href="..">See demo on Leaflet V0.7</a></p>
+	<p>This demo runs on Leaflet V<script>document.write(L.version)</script> &#10144; See <a href="..">demo on Leaflet V1.0</a></p>
 
 	<div id="map" style="width: 800px; height: 600px"></div>
 
@@ -79,8 +79,8 @@
 	</div><br/>
 
 	<!-- Doc & debug -->
-	<p>See the code of this demo <a href="../index.js">here</a> and <a href="https://github.com/Dominique92/Leaflet.draw.plus">here</a></p>
-	<p>Download & run <a href="index.html">this file</a> on your computer</p>
+	<p>See the code of this demo <a href="../examples/index.js">here</a> and <a href="https://github.com/Dominique92/Leaflet.draw.plus">here</a></p>
+	<p>To get a local demo, copy the html source of this page on a local .html file & call it from your brother (no PHP required).</p>
 	<?php if (0) { // Init input when the file is .html ?>
 		<p>This example run on a server without PHP & SQL services. If you want it to save your data on a database, you need to get the full package from <a href= "https://github.com/Dominique92/Leaflet.draw.plus">Github.com/Dominique92/Leaflet.draw.plus</a>, unzip & copy it in your own server and run Leaflet.draw.plus/test.</p>
 	<?php } ?>
@@ -92,7 +92,7 @@
 	<a href="https://github.com/Dominique92/Leaflet.draw.plus"
 	   style="position:absolute;top:0;right:0"
 	   title="Sources & docs">
-		<img src="http://www.zimuel.it/img/forkme.png" />
+		<img src="../../../examples/forkme.png" />
 	</a>
 	<p>Visit my fully integrated <a href= "https://github.com/Dominique92/MyLeaflet">Dominique92/MyLeaflet</a> library</p>
 
@@ -103,6 +103,6 @@
 	<?php } ?>
 
 	<!-- Insert the javascript after all <div> are defined -->
-	<script src="../index.js"></script>
+	<script src="../examples/index.js"></script>
 </body>
 </html>

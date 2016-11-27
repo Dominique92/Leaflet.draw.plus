@@ -1,4 +1,4 @@
-<?php // File to be executed in a PHP / MySql environment
+<?php // File to be executed if the test environment supports PHP
 
 /* Reqs : MySql 5.7.6+ / Create this database on your server:
 CREATE DATABASE drawdb;
@@ -42,9 +42,13 @@ echo ('$json_sql = '); var_dump ($json_sql = $result->fetch_object()->geom);
 include ('index.html');
 ?>
 
-<!-- debug -->
-<a href="v1"
+<a href="v0.7"
    style="position:absolute;top:150px;right:0;text-decoration:none;font-size:large"
-   title="Test draw.plus on Leaflet V1.0">
+	title="Test on Leaflet V0.7">
+	&#10144;
+</a>
+<a href="index.html"
+   style="position:absolute;top:200px;right:0;text-decoration:none;font-size:large"
+   title="Test en mode html">
 	&#10144;
 </a>

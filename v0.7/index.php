@@ -1,4 +1,4 @@
-<?php // File to be executed in a PHP / MySql environment
+<?php // File to be executed if the test environment supports PHP & MySQL
 
 /* Reqs : MySql 5.7.6+ / Create this database on your server:
 CREATE DATABASE drawdb;
