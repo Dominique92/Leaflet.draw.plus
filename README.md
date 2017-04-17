@@ -14,16 +14,16 @@ It is supported on leaflet V1.0.*
 
 NEW FEATURES
 ------------
-Force default controls to false to have to declare only required commands
-Allign drawing style on display
-Allow snap on creating elements
-Change color when hover (to be able to see different poly)
-Cut a polyline by removing a segment whose the middle marker is cliqued
-Merge 2 segments whose 2 ends match into one
-Cut a polygon by removing a segment whose the middle marker is cliqued & transform it into polyline
-Transform polyline whose the 2 ends match into polygon
-Read/write from a <form> geoJson field to be edited
-Display a <div> element when the entry is changed
+* Force default controls to false to have to declare only required commands
+* Allign drawing style on display
+* Allow snap on creating elements
+* Change color when hover (to be able to see different poly)
+* Cut a polyline by removing a segment whose the middle marker is cliqued
+* Merge 2 segments whose 2 ends match into one
+* Cut a polygon by removing a segment whose the middle marker is cliqued & transform it into polyline
+* Transform polyline whose the 2 ends match into polygon
+* Read/write from a <form> geoJson field to be edited
+* Display a <div> element when the entry is changed
 
 DEMO
 ----
