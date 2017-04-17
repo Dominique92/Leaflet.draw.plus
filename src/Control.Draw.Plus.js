@@ -3,7 +3,7 @@
  * Leaflet extension for Leaflet.draw
  * Markers, polylines, polygons, rectangles & circle editor
  * Snap on others markers, lines & polygons including the edited shape itself
- * Need https://github.com/Leaflet/Leaflet.draw and https://github.com/makinacorpus/Leaflet.Snap
+ * Requires https://github.com/Leaflet/Leaflet.draw & https://github.com/makinacorpus/Leaflet.Snap
  */
 
 L.Control.Draw.Plus = L.Control.Draw.extend({
@@ -216,6 +216,9 @@ eval('L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = ' +
 	L.Edit.PolyVerticesEdit.prototype._createMiddleMarker.toString()
 	.replace(/'click', onClick, this|'click',[a-z],this/g, "'click',this._cut,this")
 );
+
+// Resize the too big summits markers
+L.Edit.PolyVerticesEdit.prototype.options.touchIcon.options.iconSize = new L.Point(8, 8);
 
 L.Edit.PolyVerticesEdit.include({
 	_cut: function(e) {
