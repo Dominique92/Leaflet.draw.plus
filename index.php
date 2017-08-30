@@ -26,9 +26,7 @@ if ($pgeom = @$_POST['geom'])
 // Get existing data from the database
 $result = $mysqli->query("SELECT ST_AsGeoJSON (geom) AS geom FROM drawtable where id = 1");
 echo ('$json_sql = '); var_dump ($json_sql = $result->fetch_object()->geom);
-?>
 
-<?php
 include ('index.html');
 ?>
 

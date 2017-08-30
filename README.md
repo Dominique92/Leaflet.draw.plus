@@ -10,7 +10,7 @@ Leaflet plugin extension for Leaflet.draw
 
 Depends on [Leaflet.draw](https://github.com/Leaflet/Leaflet.draw).
 and [Leaflet.Snap](https://github.com/makinacorpus/Leaflet.Snap).
-It is supported on leaflet V1.0.*
+Supported both on Leaflet V0.7 & V1.+
 
 NEW FEATURES
 ------------
@@ -22,12 +22,12 @@ NEW FEATURES
 * Merge 2 segments whose 2 ends match into one
 * Cut a polygon by removing a segment whose the middle marker is cliqued & transform it into polyline
 * Transform polyline whose the 2 ends match into polygon
-* Read/write from a <form> geoJson field to be edited
-* Display a <div> element when the entry is changed
+* Read/write geoJson field to be edited from a html form
+* Display a div element when the entry is changed
 
 DEMO
 ----
-[See a DEMO using Leaflet V1.0 here](https://dominique92.github.io/MyLeaflet/src/Leaflet.draw.plus/)
+[See a DEMO using Leaflet V1.+ here](https://dominique92.github.io/MyLeaflet/src/Leaflet.draw.plus/)
 
 Usage
 -----

@@ -218,6 +218,7 @@ eval('L.Edit.PolyVerticesEdit.prototype._createMiddleMarker = ' +
 );
 
 // Resize the too big summits markers
+L.Draw.Polyline.prototype.options.touchIcon.options.iconSize =
 L.Edit.PolyVerticesEdit.prototype.options.touchIcon.options.iconSize = new L.Point(8, 8);
 
 L.Edit.PolyVerticesEdit.include({
